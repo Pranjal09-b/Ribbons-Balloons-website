@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ribbons & Balloons — Home</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="container topbar">
+    <div class="brand"><div class="logo">R&B</div><div>Ribbons & Balloons</div></div>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="cakes.html">Cakes</a>
+      <a href="specials.html">Specials</a>
+      <a href="cart.html">Cart</a>
+      <a href="stores.html">Stores</a>
+            <a href="#" id="logoutBtn">Logout</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section class="hero">
+    <div class="hero-card">
+      <h1>Delicious Cakes for Every Occasion</h1>
+      <p class="lead">Handcrafted cakes, pastries & desserts made fresh daily. Same-day delivery across Pune.</p>
+      <button class="btn primary" onclick="location.href='cakes.html'">Shop Cakes</button>
+      <button class="btn" onclick="location.href='specials.html'">View Specials</button>
+    </div>
+    <div class="hero-illustration">
+      <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587" alt="Cake display">
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© <span id="year"></span> Ribbons & Balloons</p>
+</footer>
+
+<script>
+  // Set footer year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Check if logged in
+  if(localStorage.getItem("loggedIn") !== "true"){
+    window.location.href = "login.html"; // redirect if not logged in
+  }
+
+  // Logout functionality
+  document.getElementById("logoutBtn").addEventListener("click", function(){
+    localStorage.removeItem("loggedIn");
+    window.location.href = "login.html";
+  });
+</script>
+</body>
+</html>

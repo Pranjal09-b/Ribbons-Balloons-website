@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ribbons & Balloons — Stores</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="container topbar">
+    <div class="brand"><div class="logo">R&B</div><div>Ribbons & Balloons</div></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cakes.html">Cakes</a>
+      <a href="specials.html">Specials</a>
+      <a href="stores.html"class="active">Stores</a>
+      <a href="cart.html">Cart</a>
+      <a href="checkout.html">Checkout</a>
+      <a href="contact.html">Contact</a>    
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <section>
+    <h1>Our Stores</h1>
+    <div class="grid">
+      <article class="card">
+        <img src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/7d6e0c56109759.59a0698d82b9c.jpg" alt="Pune Store">
+        <h3 class="card-title">Pune — FC Road</h3>
+        <p class="card-desc">Near Deccan Gymkhana, Pune. <br> Contact: +91 98765 43210</p>
+      </article>
+      <article class="card">
+        <img src="https://tse2.mm.bing.net/th/id/OIP.CiAnoKfrERUJLuSiuZk-IAHaHa?pid=Api&P=0&h=180" alt="Mumbai Store">
+        <h3 class="card-title">Mumbai — Bandra</h3>
+        <p class="card-desc">Bandra West, Mumbai. <br> Contact: +91 98765 12345</p>
+      </article>
+      <article class="card">
+        <img src="https://tse1.mm.bing.net/th/id/OIP.6T0b_8jFz-9afmHUNxFxtgHaDt?pid=Api&P=0&h=180" alt="Nagpur Store">
+        <h3 class="card-title">Nagpur — Sitabuldi</h3>
+        <p class="card-desc">Central Mall Road, Nagpur. <br> Contact: +91 99887 77665</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© <span id="year"></span> Ribbons & Balloons</p>
+</footer>
+<script>document.getElementById("year").textContent=new Date().getFullYear();</script>
+</body>
+</html>

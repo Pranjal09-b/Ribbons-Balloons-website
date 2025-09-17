@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Checkout — Ribbons & Balloons</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="container topbar">
+    <div class="brand"><div class="logo">R&B</div><div>Ribbons & Balloons</div></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cakes.html">Cakes</a>
+      <a href="specials.html">Specials</a>
+      <a href="stores.html">Stores</a>
+      <a href="cart.html">Cart</a>
+      <a href="checkout.html" class="active">Checkout</a>
+      <a href="contact.html">Contact</a>
+        <a href="#" id="logoutBtn">Logout</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Checkout</h1>
+
+  <!-- Customer Details -->
+  <section class="checkout-section">
+    <h2>Customer Information</h2>
+    <form id="checkoutForm">
+      <label>Name:<br><input type="text" id="name" required></label><br>
+      <label>Email:<br><input type="email" id="email" required></label><br>
+      <label>Phone:<br><input type="text" id="phone" required></label><br>
+      <label>Address:<br><textarea id="address" required></textarea></label><br>
+    </form>
+  </section>
+
+  <!-- Payment Section -->
+  <section class="checkout-section">
+    <h2>Payment</h2>
+    <p>Total Amount: ₹<span id="finalTotal">0</span></p>
+    <label>
+      <input type="radio" name="payment" value="COD" checked> Cash on Delivery
+    </label><br>
+    <label>
+      <input type="radio" name="payment" value="Online"> Online Payment
+    </label><br><br>
+    <button class="btn primary" onclick="placeOrder()">Place Order</button>
+  </section>
+</main>
+
+<footer>
+  <p>© <span id="year"></span> Ribbons & Balloons</p>
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// Load total from cart
+document.getElementById("finalTotal").textContent = localStorage.getItem("cartTotal") || 0;
+
+function placeOrder() {
+  let name = document.getElementById("name").value;
+  let email = document.getElementById("email").value;
+  let phone = document.getElementById("phone").value;
+  let address = document.getElementById("address").value;
+  let payment = document.querySelector("input[name='payment']:checked").value;
+  let total = localStorage.getItem("cartTotal") || 0;
+  let items = JSON.parse(localStorage.getItem("cart")) || [];
+
+  if (!name || !email || !phone || !address) {
+    alert("Please fill all details!");
+    return;
+  }
+
+  let order = { name, email, phone, address, payment, total, items };
+
+  fetch("place_order.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(order)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("✅ " + data.message + "\nTotal: ₹" + total);
+      localStorage.removeItem("cart");
+      localStorage.removeItem("cartTotal");
+      window.location.href = "index.html";
+    } else {
+      alert("❌ Order failed: " + data.message);
+    }
+  })
+  .catch(err => {
+    alert("❌ Error: " + err);
+  });
+}
+</script>
+</body>
+</html>

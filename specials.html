@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Specials — Ribbons & Balloons</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="container topbar">
+    <div class="brand"><div class="logo">R&B</div><div>Ribbons & Balloons</div></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cakes.html">Cakes</a>
+      <a href="specials.html" class="active">Specials</a>
+      <a href="cart.html">Cart</a>
+      <a href="stores.html">Stores</a>
+      <a href="checkout.html">Checkout</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+  <h1>Specials</h1>
+  <section class="grid">
+    <div class="card">
+      <img src="https://tse2.mm.bing.net/th/id/OIP.ruJISk2zKKfgMtHb2HIibAHaHa?pid=Api&P=0&h=180" alt="Cupcakes">
+      <div class="card-title">Assorted Cupcakes</div>
+      <div class="pill">₹300</div>
+      <button class="btn primary" onclick="addToCart('Assorted Cupcakes', 300)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="https://tse1.mm.bing.net/th/id/OIP.mKG-hG9TKSHV79koux6aZQHaE7?pid=Api&P=0&h=180" alt="Cheesecake">
+      <div class="card-title">Cheesecake</div>
+      <div class="pill">₹550</div>
+      <button class="btn primary" onclick="addToCart('Cheesecake', 550)">Add to Cart</button>
+    </div>
+
+    <div class="card">
+      <img src="https://tse2.mm.bing.net/th/id/OIP.CcxmhMkImn7y1r6Sx3l7gQHaHa?pid=Api&P=0&h=180" alt="Brownie Box">
+      <div class="card-title">Brownie Box</div>
+      <div class="pill">₹400</div>
+      <button class="btn primary" onclick="addToCart('Brownie Box', 400)">Add to Cart</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>© <span id="year"></span> Ribbons & Balloons</p>
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+function addToCart(name, price) {
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  let existing = cart.find(item => item.name === name);
+
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({name: name, price: price, qty: 1});
+  }
+
+  localStorage.setItem("cart", JSON.stringify(cart));
+  alert(name + " added to cart!");
+}
+</script>
+</body>
+</html>
