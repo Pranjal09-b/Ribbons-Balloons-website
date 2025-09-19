@@ -1,101 +1,75 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <title>Checkout — Ribbons & Balloons</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f8f8; margin: 0; padding: 0; }
+    .container { max-width: 700px; margin: 40px auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    h2 { color: #6b21a8; margin-bottom: 20px; }
+    label { display: block; margin-top: 12px; font-weight: bold; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 6px; border: 1px solid #ccc; border-radius: 4px; }
+    .payment { margin-top: 20px; }
+    .btn { margin-top: 20px; text-align: center; }
+    .btn button { background: #6b21a8; color: #fff; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+    .btn button:hover { background: #9333ea; }
+    .total { margin-top: 10px; font-size: 18px; font-weight: bold; }
+  </style>
 </head>
 <body>
-<header>
-  <div class="container topbar">
-    <div class="brand"><div class="logo">R&B</div><div>Ribbons & Balloons</div></div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="cakes.html">Cakes</a>
-      <a href="specials.html">Specials</a>
-      <a href="stores.html">Stores</a>
-      <a href="cart.html">Cart</a>
-      <a href="checkout.html" class="active">Checkout</a>
-      <a href="contact.html">Contact</a>
-        <a href="#" id="logoutBtn">Logout</a>
-    </nav>
-  </div>
-</header>
-
-<main class="container">
-  <h1>Checkout</h1>
-
-  <!-- Customer Details -->
-  <section class="checkout-section">
+  <div class="container">
     <h2>Customer Information</h2>
     <form id="checkoutForm">
-      <label>Name:<br><input type="text" id="name" required></label><br>
-      <label>Email:<br><input type="email" id="email" required></label><br>
-      <label>Phone:<br><input type="text" id="phone" required></label><br>
-      <label>Address:<br><textarea id="address" required></textarea></label><br>
+      <label>Name:</label>
+      <input type="text" name="name" required>
+
+      <label>Email:</label>
+      <input type="email" name="email" required>
+
+      <label>Phone:</label>
+      <input type="text" name="phone" required>
+
+      <label>Address:</label>
+      <textarea name="address" required></textarea>
+
+      <div class="payment">
+        <h2>Payment</h2>
+        <p class="total">Total Amount: ₹3050</p>
+        <label><input type="radio" name="payment" value="Cash on Delivery" checked> Cash on Delivery</label>
+        <label><input type="radio" name="payment" value="Online Payment"> Online Payment</label>
+      </div>
+
+      <!-- Hidden field to pass total -->
+      <input type="hidden" name="total_amount" value="3050">
+
+      <div class="btn">
+        <button type="submit">Place Order</button>
+      </div>
     </form>
-  </section>
+  </div>
 
-  <!-- Payment Section -->
-  <section class="checkout-section">
-    <h2>Payment</h2>
-    <p>Total Amount: ₹<span id="finalTotal">0</span></p>
-    <label>
-      <input type="radio" name="payment" value="COD" checked> Cash on Delivery
-    </label><br>
-    <label>
-      <input type="radio" name="payment" value="Online"> Online Payment
-    </label><br><br>
-    <button class="btn primary" onclick="placeOrder()">Place Order</button>
-  </section>
-</main>
-
-<footer>
-  <p>© <span id="year"></span> Ribbons & Balloons</p>
-</footer>
-
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
-
-// Load total from cart
-document.getElementById("finalTotal").textContent = localStorage.getItem("cartTotal") || 0;
-
-function placeOrder() {
-  let name = document.getElementById("name").value;
-  let email = document.getElementById("email").value;
-  let phone = document.getElementById("phone").value;
-  let address = document.getElementById("address").value;
-  let payment = document.querySelector("input[name='payment']:checked").value;
-  let total = localStorage.getItem("cartTotal") || 0;
-  let items = JSON.parse(localStorage.getItem("cart")) || [];
-
-  if (!name || !email || !phone || !address) {
-    alert("Please fill all details!");
-    return;
-  }
-
-  let order = { name, email, phone, address, payment, total, items };
-
-  fetch("place_order.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(order)
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success) {
-      alert("✅ " + data.message + "\nTotal: ₹" + total);
-      localStorage.removeItem("cart");
-      localStorage.removeItem("cartTotal");
-      window.location.href = "index.html";
-    } else {
-      alert("❌ Order failed: " + data.message);
-    }
-  })
-  .catch(err => {
-    alert("❌ Error: " + err);
-  });
-}
-</script>
+  <script>
+    document.getElementById("checkoutForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      fetch("checkout.php", {
+        method: "POST",
+        body: new FormData(this)
+      })
+      .then(res => res.text())
+      .then(text => {
+        try {
+          const data = JSON.parse(text);
+          if (data.status === "success") {
+            window.location.href = "receipt.php?order_id=" + data.order_id;
+          } else {
+            alert("Order failed: " + data.message);
+          }
+        } catch(err) {
+          console.error("Invalid response:", text);
+          alert("Server error – check console.");
+        }
+      });
+    });
+  </script>
 </body>
 </html>
